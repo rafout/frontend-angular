@@ -1,7 +1,7 @@
-import { LoginService } from '../services/login/login.service';
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, UrlSegment, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { LoginService } from '../services/login/login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,7 @@ export class AutenticadoGuard implements CanLoad {
     }
 
     return new Promise(async (res) => {
-      const usuarioLogado = await this.loginService.login();
+      const usuarioLogado = await this.loginService.verifyToken();
 
       if(usuarioLogado) 
         res(true);

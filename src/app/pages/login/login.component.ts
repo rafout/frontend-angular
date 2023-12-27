@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { LoginService } from 'src/app/services/login/login.service';
-
+import { Router } from "@angular/router";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -30,7 +30,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private service: LoginService
+    private service: LoginService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -44,6 +45,7 @@ export class LoginComponent implements OnInit {
         this.carregando = false;
         localStorage.setItem('token', res.access_token);
         localStorage.setItem('refresh_token', res.refresh_token);
+        this.router.navigate(['/home']);
       },
       error: (err) => {
         this.mensagem = err.error.message;

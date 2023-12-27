@@ -16,38 +16,40 @@ export class LoginService extends BaseService {
     const endpoint = 'auth/login';
 
     const response = this.post(endpoint, credentials);
-    console.log(response);
+
     return response;
   }
 
   async verifyToken() {
        
-    const token = localStorage.getItem('token') as string;
+    const refresh_token = localStorage.getItem('refresh_token') as string;
 
-    if(!token)
+    if(!refresh_token)
       return false;
 
     try {
-      this.refreshToken(token);
+      await this.refreshToken(refresh_token);
       return true;
     } catch (error){
       return false;
     }
   }
 
-  async refreshToken(token: string) {
-    const url = 'http://localhost:3000/refresh-token';
+  async refreshToken(refresh_token: string) {
+    const endpoint = 'auth/refresh';
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: token
+    const response = this.post(endpoint, { refresh_token });
+
+    response.subscribe({
+      next: (res: any) => {
+        localStorage.setItem('token', res.access_token);
+        localStorage.setItem('refresh_token', res.refresh_token);
+        return true;
+      },
+      error: (err) => {
+        return false;
       }
     });
-
-    const data = await response.json();
-
-    localStorage.setItem('token', data.token);
+  
   }
 }
