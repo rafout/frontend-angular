@@ -1,0 +1,51 @@
+<div class="c-center size">
+    <form [formGroup]="loginForm" class="jc form" (ngSubmit)="login()">
+        <h3 class="center-text login">Login</h3>
+        <mat-form-field>
+            <mat-label class="label">Usuário</mat-label>
+            <input formControlName="username" matInput />
+            <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label class="label">Senha</mat-label>
+            <input
+                formControlName="password"
+                matInput
+                [type]="mostrar ? 'password' : 'text'"
+            />
+            <button
+                type="button"
+                mat-icon-button
+                matSuffix
+                (click)="mostrar = !mostrar"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="mostrar"
+            >
+                <mat-icon>{{ mostrar ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+        </mat-form-field>
+        <button
+            *ngIf="!carregando" 
+            mat-raised-button
+            color="accent"
+            type="submit"
+            [disabled]="!loginForm.valid"
+        >
+        Entrar
+        </button>
+        <div class="spinner">
+            <mat-spinner 
+                *ngIf="carregando" 
+                color="accent" 
+                diameter="40"
+            ></mat-spinner>
+        </div>
+    </form>
+    <app-modal-error 
+        *ngIf="erro" 
+        titulo="{{titulo}}" 
+        mensagem="{{mensagem}}" 
+        (fechar)="fechar()"
+    ></app-modal-error>
+
+</div>
